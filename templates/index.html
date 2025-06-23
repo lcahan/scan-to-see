@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan To See</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #222;
+	    font-size: 2.5rem;
+	    margin-bottom: .25rem;
+        }
+        h2.subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-top: 0;
+	    margin-bottom: 2rem;
+        }
+        form {
+            margin-bottom: 2rem;
+        }
+        label {
+            font-weight: bold;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        button, input[type="submit"] {
+            padding: 0.75rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .article {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+        .article a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .snippet {
+            font-size: 0.9rem;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scan To See</h1>
+    <h2 class="subtitle">Trusted News GPT</h2>
+
+    <form method="post">
+	<label for="bias">Pick the lens you want to look through:</label><br>
+        <select name="bias" id="bias">
+	    <option value="" disabled selected>– Select one –</option>
+            <option value="left" {% if bias == 'left' %}selected{% endif %}>Liberal</option>
+	    <option value="center" {% if bias == 'center' %}selected{% endif %}>Centerist</option>
+	    <option value="right" {% if bias == 'right' %}selected{% endif %}>Conservative</option>
+        </select><br>
+
+	<label for="question">Curious about a headline, law, or political idea? Ask here:</label><br>
+	<input type="text" name="question" id="question" placeholder="e.g., What happened in the 2020 election?" value="{{ query 
+}}"><br>
+
+        <input type="submit" value="Find Resources">
+    </form>
+
+
+{% if not articles %}
+    <div style="margin-top: 1.5rem; background-color: #f9f9f9; padding: 1rem; border-left: 3px solid #ccc; border-radius: 4px; font-size: 
+0.85rem; color: #444;">
+        <h3><strong>Note from the Creator</strong></h3>
+        <p>Hi! I am a high school student from California, and I coded and built this project out of need. 
+When I tried using AI to help me better understand not just current events, but their significance, I often didn’t 
+know where the information was coming from or what kind of bias might be shaping it. I didn’t want easy answers—I wanted 
+context and the ability to think for myself.</p>
+
+        <p>So, I created this tool, designed not to tell you what to think, but to give you access to trustworthy resources 
+across the political spectrum, based on what you’re curious about. When using it, the more specific your questions are, the better the tool can tailor the results to your needs. I have 
+categorized these sources according to the perspectives they are commonly associated with (liberal, 
+centerist, conservative), so you can choose how you want to approach a topic, and maybe even challenge yourself with another 
+viewpoint.</p>
+
+        <p><strong>Please note this is a beta version, and it’s youth-created, so thank you for exploring it with an 
+open mind.</strong></p>
+
+        <p>Thank you for being part of it.<br>– Lucinda</p>
+    </div>
+{% endif %}
+
+
+
+    {% if articles %}
+        <h2>Relevant Articles</h2>
+        {% for title, url, snippet in articles %}
+            <div class="article">
+                <a href="{{ url }}" target="_blank">{{ title }}</a><br>
+                <div class="snippet">{{ snippet }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">Error: {{ error }}</p>
+    {% endif %}
+</body>
+</html>
+
